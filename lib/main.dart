@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:amse_taquin/exercice2.dart';
+import 'package:amse_taquin/exercice2b.dart';
 
 void main() {
   runApp(MyApp());
@@ -45,6 +46,14 @@ class _MyHomePageState extends State<MyHomePage> {
               trailing: Icon(Icons.play_arrow_rounded),
               onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Exercice2_Page(title: "Transformation image"))),
             ),
+          ),
+          Card(child:
+          ListTile(
+            title: Text('Exercice 2b'),
+            subtitle: Text('Animation image'),
+            trailing: Icon(Icons.play_arrow_rounded),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Exercice2b_Page(title: "Animation image"))),
+          ),
           ),
         ],
       )

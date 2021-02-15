@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +17,6 @@ class _Exercice2_Page extends State<Exercice2_Page>{
   double _rot_z = 0;
   double _scale = 100;
   bool _mirror = false;
-  final pi = 3.1415926535897932;
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +40,9 @@ class _Exercice2_Page extends State<Exercice2_Page>{
                     0, 0, 1, 0,
                     0, 0, 0, 1 / (_scale/100),
                   )
-                    ..rotateX(pi / 180 * _rot_x)
-                    ..rotateY(_mirror ? pi : 0)
-                    ..rotateZ(pi / 180 * _rot_z)
+                    ..rotateX(math.pi / 180 * _rot_x)
+                    ..rotateY(_mirror ? math.pi : 0)
+                    ..rotateZ(math.pi / 180 * _rot_z)
               ),
             ),
             Row(
