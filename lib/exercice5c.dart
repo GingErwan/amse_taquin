@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 class Exercice5c_Page extends StatefulWidget{
   Exercice5c_Page({Key key, this.title}) : super(key: key);
@@ -11,11 +12,12 @@ class Exercice5c_Page extends StatefulWidget{
 }
 
 class _Exercice5c_Page extends State<Exercice5c_Page> {
+
   @override
   Widget build(BuildContext context) {
 
-    for(double i=-1; i<2; i++){
-      for(double j=-1; j<2; j++){
+    for(double i=-1; i<=1; i+= 2/(_numSlider-1)){
+      for(double j=-1; j<=1; j+= 2/(_numSlider-1)){
         tiles.add(new Tile(imageURL: 'https://picsum.photos/512', alignment: Alignment(j, i)));
       }
     }
@@ -25,13 +27,35 @@ class _Exercice5c_Page extends State<Exercice5c_Page> {
         title: Text(widget.title),
       ),
       body: Container(
-        margin: EdgeInsets.all(20.0),
-        child: GridView.count(
-          crossAxisCount: 3,
-          crossAxisSpacing: 5,
-          mainAxisSpacing: 5,
+        child: Column(
           children: [
-            for(Tile t in tiles) SizedBox(width: 512/3, height: 512/3, child: Container(child: this.createTileWidgetFrom(t))),
+            Row(children: [
+              Text("Taille:"),
+              Expanded(
+                child: Slider(
+                  min: 3,
+                  max: 10,
+                  value: _numSlider,
+                  divisions: 8,
+                  label: _numSlider.toString(),
+                  onChanged: (double value) {
+                    setState((){
+                      _numSlider = value;
+                    });
+                  },
+                ),
+              ),
+            ],),
+
+            GridView.count(
+              scrollDirection: Axis.horizontal,
+              crossAxisCount: _numSlider.toInt(),
+              crossAxisSpacing: 5,
+              mainAxisSpacing: 5,
+              children: [
+                for(Tile t in tiles) SizedBox(width: 512/_numSlider, height: 512/_numSlider, child: Container(child: this.createTileWidgetFrom(t))),
+              ],
+            ),
           ],
         ),
       ),
@@ -62,8 +86,8 @@ class Tile {
         child: Container(
           child: Align(
             alignment: this.alignment,
-            widthFactor: 0.33,
-            heightFactor: 0.33,
+            widthFactor: 1/_numSlider,
+            heightFactor: 1/_numSlider,
             child: Image.network(this.imageURL),
           ),
         ),
@@ -72,4 +96,5 @@ class Tile {
   }
 }
 
+double _numSlider = 3;
 List<Tile> tiles = new List<Tile>();
