@@ -31,17 +31,7 @@ class _Exercice5b_Page extends State<Exercice5b_Page> {
           crossAxisSpacing: 5,
           mainAxisSpacing: 5,
           children: [
-            SizedBox(width: 512/3, height: 512/3, child: Container(child: this.createTileWidgetFrom(tiles[0]))),
-            SizedBox(width: 512/3, height: 512/3, child: Container(child: this.createTileWidgetFrom(tiles[1]))),
-            SizedBox(width: 512/3, height: 512/3, child: Container(child: this.createTileWidgetFrom(tiles[2]))),
-
-            SizedBox(width: 512/3, height: 512/3, child: Container(child: this.createTileWidgetFrom(tiles[3]))),
-            SizedBox(width: 512/3, height: 512/3, child: Container(child: this.createTileWidgetFrom(tiles[4]))),
-            SizedBox(width: 512/3, height: 512/3, child: Container(child: this.createTileWidgetFrom(tiles[5]))),
-
-            SizedBox(width: 512/3, height: 512/3, child: Container(child: this.createTileWidgetFrom(tiles[6]))),
-            SizedBox(width: 512/3, height: 512/3, child: Container(child: this.createTileWidgetFrom(tiles[7]))),
-            SizedBox(width: 512/3, height: 512/3, child: Container(child: this.createTileWidgetFrom(tiles[8]))),
+            for(Tile t in tiles) SizedBox(width: 512/3, height: 512/3, child: Container(child: this.createTileWidgetFrom(t))),
           ],
         ),
       ),
@@ -75,11 +65,11 @@ class Tile {
             widthFactor: 0.33,
             heightFactor: 0.33,
             child: Image.network(this.imageURL),
-            ),
           ),
         ),
-      );
-    }
+      ),
+    );
+  }
 }
 
 List<Tile> tiles = new List<Tile>();
