@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:amse_taquin/exercice2.dart';
 import 'package:amse_taquin/exercice2b.dart';
 import 'package:amse_taquin/exercice4.dart';
+import 'package:amse_taquin/exercice5a.dart';
 
 void main() {
   runApp(MyApp());
@@ -62,6 +63,14 @@ class _MyHomePageState extends State<MyHomePage> {
               subtitle: Text('Récupération tile'),
               trailing: Icon(Icons.play_arrow_rounded),
               onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Exercice4_Page(title: "Récupération tile"))),
+            ),
+          ),
+          Card(child:
+            ListTile(
+              title: Text('Exercice 5a'),
+              subtitle: Text('Plateau de tuiles'),
+              trailing: Icon(Icons.play_arrow_rounded),
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Exercice5a_Page(title: "Plateau de tuiles"))),
             ),
           ),
         ],
