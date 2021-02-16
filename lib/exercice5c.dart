@@ -27,8 +27,19 @@ class _Exercice5c_Page extends State<Exercice5c_Page> {
         title: Text(widget.title),
       ),
       body: Container(
+        margin: const EdgeInsets.all(5.0),
         child: Column(
           children: [
+            Expanded(
+              child: GridView.count(
+                crossAxisCount: _numSlider.toInt(),
+                crossAxisSpacing: 2,
+                mainAxisSpacing: 2,
+                children: [
+                  for(Tile t in tiles) SizedBox(width: 512/_numSlider, height: 512/_numSlider, child: Container(child: this.createTileWidgetFrom(t))),
+                ],
+              ),
+            ),
             Row(children: [
               Text("Taille:"),
               Expanded(
@@ -36,9 +47,12 @@ class _Exercice5c_Page extends State<Exercice5c_Page> {
                   min: 3,
                   max: 10,
                   value: _numSlider,
-                  divisions: 8,
-                  label: _numSlider.toString(),
+                  divisions: 7,
+                  label: _numSlider.toInt().toString(),
                   onChanged: (double value) {
+                    while(tiles.isNotEmpty){
+                      tiles.removeLast();
+                    }
                     setState((){
                       _numSlider = value;
                     });
@@ -46,16 +60,6 @@ class _Exercice5c_Page extends State<Exercice5c_Page> {
                 ),
               ),
             ],),
-
-            GridView.count(
-              scrollDirection: Axis.horizontal,
-              crossAxisCount: _numSlider.toInt(),
-              crossAxisSpacing: 5,
-              mainAxisSpacing: 5,
-              children: [
-                for(Tile t in tiles) SizedBox(width: 512/_numSlider, height: 512/_numSlider, child: Container(child: this.createTileWidgetFrom(t))),
-              ],
-            ),
           ],
         ),
       ),
