@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 class Exercice6a_Page extends StatefulWidget{
@@ -13,15 +12,13 @@ class Exercice6a_Page extends StatefulWidget{
 }
 
 class _Exercice6a_Page extends State<Exercice6a_Page> {
-  List<Widget> tiles =
-  List<Widget>.generate(2, (index) => TileWidget(Tile.randomColor()));
+  List<Widget> tiles = List<Widget>.generate(2, (index) => TileWidget(Tile.randomColor()));
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Moving Tiles'),
-        centerTitle: true,
       ),
       body: Row(children: tiles),
       floatingActionButton: FloatingActionButton(

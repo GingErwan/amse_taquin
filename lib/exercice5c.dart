@@ -51,10 +51,10 @@ class _Exercice5c_Page extends State<Exercice5c_Page> {
                 Text("Taille:"),
                 Expanded(
                   child: Slider(
-                    min: 3,
+                    min: 2,
                     max: 10,
                     value: _numSlider,
-                    divisions: 7,
+                    divisions: 8,
                     label: _numSlider.toInt().toString(),
                     onChanged: (double value) {
                       while(tiles.isNotEmpty){

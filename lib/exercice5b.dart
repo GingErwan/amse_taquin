@@ -20,19 +20,25 @@ class _Exercice5b_Page extends State<Exercice5b_Page> {
       }
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Container(
-        margin: EdgeInsets.all(20.0),
-        child: GridView.count(
-          crossAxisCount: 3,
-          crossAxisSpacing: 5,
-          mainAxisSpacing: 5,
-          children: [
-            for(Tile t in tiles) SizedBox(width: 512/3, height: 512/3, child: Container(child: this.createTileWidgetFrom(t))),
-          ],
+    return WillPopScope(
+      onWillPop: (){
+        while(tiles.isNotEmpty) tiles.removeLast();
+        Navigator.pop(context);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
+        body: Container(
+          margin: EdgeInsets.all(20.0),
+          child: GridView.count(
+            crossAxisCount: 3,
+            crossAxisSpacing: 5,
+            mainAxisSpacing: 5,
+            children: [
+              for(Tile t in tiles) SizedBox(width: 512/3, height: 512/3, child: Container(child: this.createTileWidgetFrom(t))),
+            ],
+          ),
         ),
       ),
     );
