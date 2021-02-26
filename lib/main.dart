@@ -7,6 +7,7 @@ import 'package:amse_taquin/exercice5b.dart';
 import 'package:amse_taquin/exercice5c.dart';
 import 'package:amse_taquin/exercice6a.dart';
 import 'package:amse_taquin/exercice6b.dart';
+import 'package:amse_taquin/exercice7.dart';
 
 void main() {
   runApp(MyApp());
@@ -107,6 +108,14 @@ class _MyHomePageState extends State<MyHomePage> {
               subtitle: Text('Echange de tiles dans grille'),
               trailing: Icon(Icons.play_arrow_rounded),
               onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Exercice6b_Page(title: "Echange de tiles dans grilles"))),
+            ),
+          ),
+          Card(child:
+            ListTile(
+              title: Text('Exercice 7'),
+              subtitle: Text('Jeu du Taquin'),
+              trailing: Icon(Icons.play_arrow_rounded),
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Exercice7(title: "Echange de tiles dans grilles"))),
             ),
           ),
         ],
