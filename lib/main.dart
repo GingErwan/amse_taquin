@@ -115,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
               title: Text('Exercice 7'),
               subtitle: Text('Jeu du Taquin'),
               trailing: Icon(Icons.play_arrow_rounded),
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Exercice7(title: "Echange de tiles dans grilles"))),
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Exercice7(title: "Taquin"))),
             ),
           ),
         ],

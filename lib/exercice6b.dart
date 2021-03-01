@@ -9,7 +9,7 @@ class Tile {
   Tile(this.text, this.color);
 }
 
-//Widget
+//WIDGET
 class TileWidget extends StatelessWidget {
   final Tile tile;
 
