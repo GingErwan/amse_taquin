@@ -104,6 +104,24 @@ class BodyTilesAppState extends State<BodyTilesApp>{
                 ]
               )
             ),
+
+            Center(
+              child: Container(
+                child: !this.hasWon
+                  ? null
+                  : Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text("You Won!"),
+                  ),
+              )
+            ),
+
+            Row(
+              children: [
+                Text("Moves: " + this.moves.toString()),
+              ],
+            )
+
           ],
         ),
 
@@ -113,6 +131,8 @@ class BodyTilesAppState extends State<BodyTilesApp>{
             setState(() {
               this.gameOn = !this.gameOn;
               if(this.gameOn) {
+                this.hasWon = false;
+                this.moves = 0;
                 this.indexRemovedTile = random.nextInt(gridSize*gridSize);
                 tilesGrid = fillList();
               }else{
@@ -188,21 +208,25 @@ class BodyTilesAppState extends State<BodyTilesApp>{
       if(indexRemovedTile+1 == index){
         tilesGrid.insert(indexRemovedTile, tilesGrid.removeAt(indexRemovedTile+1));
         indexRemovedTile++;
+        moves++;
       } else if(indexRemovedTile-1 == index){
         tilesGrid.insert(indexRemovedTile, tilesGrid.removeAt(indexRemovedTile-1));
         indexRemovedTile--;
+        moves++;
       } else if(indexRemovedTile+gridSize == index){
         Widget cp = tilesGrid.removeAt(index);
         tilesGrid.insert(index, tilesGrid.elementAt(indexRemovedTile));
         tilesGrid.removeAt(indexRemovedTile);
         tilesGrid.insert(indexRemovedTile, cp);
         indexRemovedTile+=gridSize;
+        moves++;
       } else if(indexRemovedTile-gridSize == index){
         Widget cp = tilesGrid.removeAt(index);
         tilesGrid.insert(index, tilesGrid.elementAt(indexRemovedTile-1));
         tilesGrid.removeAt(indexRemovedTile);
         tilesGrid.insert(indexRemovedTile, cp);
         indexRemovedTile-=gridSize;
+        moves++;
       }
 
       if(gameOn){
