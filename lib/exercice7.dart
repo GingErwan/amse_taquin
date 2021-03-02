@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -17,19 +18,15 @@ class Tile {
 class TileWidget extends StatelessWidget {
   final Tile tile;
   AlignmentGeometry alignment;
-  bool emptyTile;
+  bool isEmpty;
 
-  TileWidget(this.tile, this.alignment);
+  TileWidget(this.tile, this.alignment, this.isEmpty);
 
   @override
   Widget build(BuildContext context) {
-    return this.textBox();
-  }
-
-  Widget textBox() {
-    return Container(
-      child: Center(child: Text(tile.number.toString())),
-    );
+    return this.isEmpty
+      ? Container(color: Colors.white)
+      : croppedImageTile();
   }
 
   Widget croppedImageTile() {
@@ -76,12 +73,15 @@ class BodyTilesApp extends StatefulWidget{
 }
 
 class BodyTilesAppState extends State<BodyTilesApp>{
-  int indexRemovedTile;
-  bool gameOn;
-  List<Widget> tilesGrid;
+  int indexRemovedTile, moves, difficultyLevel;
+  bool gameOn, hasWon;
+  List<TileWidget> tilesGrid;
 
   BodyTilesAppState() {
+    moves = 0;
+    difficultyLevel = 0;
     gameOn = false;
+    hasWon = false;
     tilesGrid = fillList();
   }
 
@@ -100,8 +100,8 @@ class BodyTilesAppState extends State<BodyTilesApp>{
                 crossAxisSpacing: 2,
                 mainAxisSpacing: 2,
                 children: [
-                  for(Widget t in tilesGrid) SizedBox(width: 512/gridSize, height: 512/gridSize, child: createWidgetForGrid(t, tilesGrid.indexOf(t))),
-                ],
+                  for(Widget t in tilesGrid) createWidgetForGrid(t, tilesGrid.indexOf(t)),
+                ]
               )
             ),
           ],
@@ -114,10 +114,10 @@ class BodyTilesAppState extends State<BodyTilesApp>{
               this.gameOn = !this.gameOn;
               if(this.gameOn) {
                 this.indexRemovedTile = random.nextInt(gridSize*gridSize);
-                TileWidget cp = tilesGrid.removeAt(indexRemovedTile);
-                tilesGrid.insert(indexRemovedTile, TileWidget(Tile(indexRemovedTile), cp.alignment));
+                tilesGrid = fillList();
               }else{
                 this.indexRemovedTile = null;
+                tilesGrid = fillList();
               }
             });
           },
@@ -157,13 +157,9 @@ class BodyTilesAppState extends State<BodyTilesApp>{
     );
   }
 
-  fillList() {
-    return List<Widget>.generate(gridSize*gridSize, (index) => TileWidget(Tile(index), Alignment((index%gridSize)/gridSize*2-1, (index%gridSize)/gridSize*2-1)));
-  }
-
   createWidgetForGrid(TileWidget t, int index) {
     if((index-1 == indexRemovedTile && index%gridSize == 0) || (index+1 == indexRemovedTile && indexRemovedTile%gridSize == 0)){
-      return t.croppedImageTile();
+      return t;
     } else {
       if (index+1 == indexRemovedTile ||
           index-1 == indexRemovedTile ||
@@ -171,7 +167,7 @@ class BodyTilesAppState extends State<BodyTilesApp>{
           index-gridSize == indexRemovedTile){
         return InkWell(
           child: Container(
-            child: t.croppedImageTile(),
+            child: t,
             decoration: BoxDecoration(
                 border: Border.all(
                   color: Colors.deepPurple,
@@ -182,7 +178,7 @@ class BodyTilesAppState extends State<BodyTilesApp>{
           onTap: () => swapTiles(index),
         );
       } else {
-        return t.croppedImageTile();
+        return t;
       }
     }
   }
@@ -208,7 +204,50 @@ class BodyTilesAppState extends State<BodyTilesApp>{
         tilesGrid.insert(indexRemovedTile, cp);
         indexRemovedTile-=gridSize;
       }
+
+      if(gameOn){
+        if(checkWin()){
+          this.hasWon = true;
+          this.gameOn = false;
+          this.indexRemovedTile = null;
+          tilesGrid = fillList();
+        }
+      }
+
     });
+  }
+
+  fillList() {
+    List<TileWidget> listTemp = List<TileWidget>();
+
+    for(double i=0; i<gridSize; i++){
+      for(double j=0; j<gridSize; j++){
+        j+i*gridSize == this.indexRemovedTile
+            ? listTemp.add(TileWidget(
+          Tile((j+i*gridSize).toInt()),
+          Alignment(j/(gridSize-1)*2 - 1, i/(gridSize-1)*2- 1),
+          true,
+        ))
+            : listTemp.add(TileWidget(
+          Tile((j+i*gridSize).toInt()),
+          Alignment(j/(gridSize-1)*2 - 1, i/(gridSize-1)*2 - 1),
+          false,
+        ));
+      }
+    }
+    return listTemp;
+  }
+
+  bool checkWin(){
+    return listEquals(getIndexGrid(), getIndexInit()) ? true : false;
+  }
+
+  List<int> getIndexGrid(){
+    return List<int>.generate(gridSize*gridSize, (index) => tilesGrid.elementAt(index).tile.number);
+  }
+
+  List<int> getIndexInit(){
+    return List<int>.generate(gridSize*gridSize, (index) => index);
   }
 
 }
