@@ -1,3 +1,4 @@
+import 'package:amse_taquin/exercice4.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -76,12 +77,14 @@ class BodyTilesAppState extends State<BodyTilesApp>{
   int indexRemovedTile, moves, difficultyLevel;
   bool gameOn, hasWon;
   List<TileWidget> tilesGrid;
+  List<int> availableMoves;
 
   BodyTilesAppState() {
     moves = 0;
     difficultyLevel = 0;
     gameOn = false;
     hasWon = false;
+    availableMoves = List<int>();
     tilesGrid = fillList();
   }
 
@@ -129,16 +132,17 @@ class BodyTilesAppState extends State<BodyTilesApp>{
           child: Icon(gameOn ? Icons.stop_rounded : Icons.play_arrow_rounded),
           onPressed: () {
             setState(() {
-              this.gameOn = !this.gameOn;
-              if(this.gameOn) {
-                this.hasWon = false;
-                this.moves = 0;
+              if(!this.gameOn) {
                 this.indexRemovedTile = random.nextInt(gridSize*gridSize);
                 tilesGrid = fillList();
+                this.startBoard();
+                this.hasWon = false;
+                this.moves = 0;
               }else{
                 this.indexRemovedTile = null;
                 tilesGrid = fillList();
               }
+              this.gameOn = !this.gameOn;
             });
           },
         ),
@@ -203,6 +207,28 @@ class BodyTilesAppState extends State<BodyTilesApp>{
     }
   }
 
+  startBoard(){
+    for(int i=0; i<100; i++){
+      getAvailableMoves();
+      swapTiles(this.availableMoves[random.nextInt(this.availableMoves.length)]);
+    }
+  }
+
+  getAvailableMoves(){
+    this.availableMoves = [];
+    for(int i=0; i<tilesGrid.length; i++){
+      if(!(i-1 == indexRemovedTile && i%gridSize == 0) &&
+        !(i+1 == indexRemovedTile && indexRemovedTile%gridSize == 0)){
+        if (i+1 == indexRemovedTile ||
+            i-1 == indexRemovedTile ||
+            i+gridSize == indexRemovedTile ||
+            i-gridSize == indexRemovedTile){
+          this.availableMoves.add(i);
+        }
+      }
+    }
+  }
+
   swapTiles(int index){
     setState(() {
       if(indexRemovedTile+1 == index){
@@ -237,8 +263,8 @@ class BodyTilesAppState extends State<BodyTilesApp>{
           tilesGrid = fillList();
         }
       }
-
     });
+
   }
 
   fillList() {
