@@ -81,7 +81,7 @@ class BodyTilesAppState extends State<BodyTilesApp>{
 
   BodyTilesAppState() {
     moves = 0;
-    difficultyLevel = 0;
+    difficultyLevel = 1;
     gameOn = false;
     hasWon = false;
     availableMoves = List<int>();
@@ -90,92 +90,123 @@ class BodyTilesAppState extends State<BodyTilesApp>{
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () {
-        Navigator.pop(context);
-      },
-      child: Scaffold(
-        body: Column(
-          children: [
-            Expanded(
-              child: GridView.count(
-                crossAxisCount: gridSize,
-                crossAxisSpacing: 2,
-                mainAxisSpacing: 2,
-                children: [
-                  for(Widget t in tilesGrid) createWidgetForGrid(t, tilesGrid.indexOf(t)),
-                ]
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Expanded(
+            child: GridView.count(
+              crossAxisCount: gridSize,
+              crossAxisSpacing: 2,
+              mainAxisSpacing: 2,
+              children: [for(Widget t in tilesGrid) createWidgetForGrid(t, tilesGrid.indexOf(t)),]
+            ),
+          ),
+
+          Container(
+            alignment: Alignment.center,
+            child: !this.hasWon
+              ? null
+              : Center(child: Container(
+                child: Container(
+                  alignment: Alignment.center,
+                  child:
+                    Text("You Won!",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.deepPurpleAccent, fontSize: 50)
+                    ),
+                ),
+            )),
+          ),
+
+          SizedBox(height: 50),
+
+          Container(
+            child: !this.gameOn
+            ? Row(children: [
+                Text("Difficulty -",
+                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey, fontSize: 20)
+                ),
+                Expanded(child: Slider(
+                  min: 1,
+                  max: 5,
+                  value: this.difficultyLevel.toDouble(),
+                  divisions: 4,
+                  label: this.difficultyLevel.toString(),
+                  onChanged: (double value) {setState(() {
+                    this.difficultyLevel = value.toInt();
+                  });},
+                )),
+               ],
               )
+            : null,
+          ),
+
+          SizedBox(height: 10),
+
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Text("Moves - " + this.moves.toString(),
+                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey, fontSize: 20)
+            ),
+          ),
+
+          SizedBox(height: 50),
+
+        ],
+      ),
+
+      floatingActionButton: FloatingActionButton(
+        child: Icon(gameOn ? Icons.stop_rounded : Icons.play_arrow_rounded),
+        onPressed: () {
+          setState(() {
+            if(!this.gameOn) {
+              this.indexRemovedTile = random.nextInt(gridSize*gridSize);
+              tilesGrid = fillList();
+              this.startBoard();
+              this.hasWon = false;
+              this.moves = 0;
+            }else{
+              this.indexRemovedTile = null;
+              tilesGrid = fillList();
+            }
+            this.gameOn = !this.gameOn;
+          });
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+
+      bottomNavigationBar: BottomAppBar(
+        child: new Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget> [
+            Expanded(child: IconButton(
+                icon: Icon(Icons.remove, color: (!this.gameOn && gridSize > 2) ? Colors.blueGrey: Colors.redAccent),
+                onPressed: () {
+                  if (!this.gameOn && gridSize > 2) {
+                    setState(() {
+                      gridSize--;
+                      tilesGrid = fillList();
+                    });
+                  }
+                },
+              ),
             ),
 
-            Center(
-              child: Container(
-                child: !this.hasWon
-                  ? null
-                  : Container(
-                      alignment: Alignment.centerLeft,
-                      child: Text("You Won!"),
-                  ),
-              )
+            Expanded(child: IconButton(
+                icon: Icon(Icons.add, color: (!this.gameOn && gridSize < 10) ? Colors.blueGrey : Colors.redAccent),
+                onPressed: () {
+                  if (!this.gameOn && gridSize < 10) {
+                    setState(() {
+                      gridSize++;
+                      tilesGrid = fillList();
+                    });
+                  }
+                },
+              ),
             ),
-
-            Row(
-              children: [
-                Text("Moves: " + this.moves.toString()),
-              ],
-            )
 
           ],
-        ),
-
-        floatingActionButton: FloatingActionButton(
-          child: Icon(gameOn ? Icons.stop_rounded : Icons.play_arrow_rounded),
-          onPressed: () {
-            setState(() {
-              if(!this.gameOn) {
-                this.indexRemovedTile = random.nextInt(gridSize*gridSize);
-                tilesGrid = fillList();
-                this.startBoard();
-                this.hasWon = false;
-                this.moves = 0;
-              }else{
-                this.indexRemovedTile = null;
-                tilesGrid = fillList();
-              }
-              this.gameOn = !this.gameOn;
-            });
-          },
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-
-        bottomNavigationBar: BottomAppBar(
-          child: new Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget> [
-              Expanded(child: IconButton(
-                  icon: Icon(Icons.add, color: (!this.gameOn && gridSize < 10) ? Colors.blueGrey : Colors.redAccent),
-                  onPressed: () {
-                    if (!this.gameOn && gridSize < 10) {
-                      setState(() {
-                        gridSize++;
-                        tilesGrid = fillList();
-                      });}
-                    },
-                ),
-              ),
-              Expanded(child: IconButton(
-                  icon: Icon(Icons.remove, color: (!this.gameOn && gridSize > 2) ? Colors.blueGrey: Colors.redAccent),
-                  onPressed: () {
-                    if (!this.gameOn && gridSize > 2) {
-                      setState(() {
-                        gridSize--;
-                        tilesGrid = fillList();
-                      });}
-                    },
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );
@@ -208,7 +239,7 @@ class BodyTilesAppState extends State<BodyTilesApp>{
   }
 
   startBoard(){
-    for(int i=0; i<100; i++){
+    for(int i=0; i<this.difficultyLevel*50; i++){
       getAvailableMoves();
       swapTiles(this.availableMoves[random.nextInt(this.availableMoves.length)]);
     }
