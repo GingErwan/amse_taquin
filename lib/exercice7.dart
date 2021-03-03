@@ -98,6 +98,7 @@ class BodyTilesAppState extends State<BodyTilesApp>{
               crossAxisCount: gridSize,
               crossAxisSpacing: 2,
               mainAxisSpacing: 2,
+              physics: NeverScrollableScrollPhysics(),
               children: [for(Widget t in tilesGrid) createWidgetForGrid(t, tilesGrid.indexOf(t)),]
             ),
           ),
@@ -118,6 +119,8 @@ class BodyTilesAppState extends State<BodyTilesApp>{
                 ),
             )),
           ),
+
+          SizedBox(height: 10),
 
           Container(
             child: !this.gameOn
@@ -140,6 +143,7 @@ class BodyTilesAppState extends State<BodyTilesApp>{
             : null,
           ),
 
+          SizedBox(height: 10),
 
           Container(
             alignment: Alignment.centerLeft,
@@ -147,6 +151,8 @@ class BodyTilesAppState extends State<BodyTilesApp>{
                 style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey, fontSize: 20)
             ),
           ),
+
+          SizedBox(height: 20),
 
         ],
       ),
