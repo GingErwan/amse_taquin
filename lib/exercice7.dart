@@ -108,6 +108,7 @@ class BodyTilesAppState extends State<BodyTilesApp>{
               ? null
               : Center(child: Container(
                 child: Container(
+                  color: Colors.transparent,
                   alignment: Alignment.center,
                   child:
                     Text("You Won!",
@@ -117,8 +118,6 @@ class BodyTilesAppState extends State<BodyTilesApp>{
                 ),
             )),
           ),
-
-          SizedBox(height: 50),
 
           Container(
             child: !this.gameOn
@@ -141,7 +140,6 @@ class BodyTilesAppState extends State<BodyTilesApp>{
             : null,
           ),
 
-          SizedBox(height: 10),
 
           Container(
             alignment: Alignment.centerLeft,
@@ -149,8 +147,6 @@ class BodyTilesAppState extends State<BodyTilesApp>{
                 style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey, fontSize: 20)
             ),
           ),
-
-          SizedBox(height: 50),
 
         ],
       ),
@@ -186,6 +182,8 @@ class BodyTilesAppState extends State<BodyTilesApp>{
                     setState(() {
                       gridSize--;
                       tilesGrid = fillList();
+                      moves = 0;
+                      hasWon = false;
                     });
                   }
                 },
@@ -199,6 +197,8 @@ class BodyTilesAppState extends State<BodyTilesApp>{
                     setState(() {
                       gridSize++;
                       tilesGrid = fillList();
+                      moves = 0;
+                      hasWon = false;
                     });
                   }
                 },
